@@ -32,7 +32,7 @@ public class Main {
         String actualVersion = NetworkUtils.getLastVersion();
         if (!actualVersion.equals(getVersion())) {
             System.out.println("Encontrado una actualización, actualizando...");
-            URL website = new URL("https://raw.githubusercontent.com/VSeryi/mcunionlu-launcher/master/launcher.jar");
+            URL website = new URL("https://raw.githubusercontent.com/VSeryi/mcunionlu-launcher/master/launcher/bin/launcher.jar");
             ReadableByteChannel rbc = Channels.newChannel(website.openStream());
             FileOutputStream fos = new FileOutputStream("launcher.jar");
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);

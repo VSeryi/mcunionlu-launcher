@@ -37,7 +37,7 @@ public class NetworkUtils {
     public static String getLastVersion() {
         String result = "-1";
         try {
-            String versionUrl = "https://raw.githubusercontent.com/VSeryi/mcunionlu-launcher/master/version-launcher.txt";
+            String versionUrl = "https://raw.githubusercontent.com/VSeryi/mcunionlu-launcher/master/launcher/bin/version-launcher.txt";
             URL url = new URL(versionUrl);
             HttpURLConnection con = (HttpURLConnection) url
                     .openConnection();
