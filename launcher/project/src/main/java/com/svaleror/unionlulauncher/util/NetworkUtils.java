@@ -49,8 +49,8 @@ public class NetworkUtils {
         return open;
     }
 
-    public static boolean makeLogin(String user, String password) {
-        boolean result = false;
+    public static int makeLogin(String user, String password) {
+        int result = 0;
         try {
             String loginUrl = "http://unionlu-svalero.rhcloud.com/login.php?user=#{username}&password=#{password}";
             String loginOk = "loginWasOK";
@@ -69,13 +69,15 @@ public class NetworkUtils {
                     sb.append(line);
                 }
                 if (!sb.toString().contains(loginBad) && sb.toString().contains(loginOk)) {
-                    result = true;
+                     result = 1;
                 }
+            } else {
+                result = -1;
             }
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getStackTrace()[0]);
-            result = false;
+            result = -1;
         }
         return result;
     }

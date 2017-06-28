@@ -252,22 +252,23 @@ public class MainUi extends javax.swing.JFrame {
                 enableComponents();
                 return;
             } else {
-                LaunchTask task = new LaunchTaskBuilder()
-                        .setCachesDir("./data/")
-                        .setForgeVersion("1.7.10", "1.7.10-10.13.4.1614-1.7.10")
-                        .setInstanceDir("./minecraft/")
-                        .setUsername(settings.getUser()).setNetOffline()
-                        .setOffline()
-                        .build();
-                LaunchSpec spec = task.getSpec();
-                spec.getJvmArgs().add(settings.getRamString());
-                Process run = spec.run(new File(settings.getJavaPath()).toPath());
-                System.exit(0);
+                int choice = JOptionPane.showOptionDialog(this, "No se ha establecido conexión con el servidor. Se iniciará el Minecraft en modo Offline.", "AVISO IMPORTANTE", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+                if (choice == JOptionPane.YES_OPTION) {
+                    this.runMinecraft(true);
+                } else {
+                    enableComponents();
+                    return;
+                }
             }
         }
-
-        if (!NetworkUtils.makeLogin(fieldUser.getText(), fieldPassword.getText())) {
-            JOptionPane.showMessageDialog(this, "La relacion usuario-contraseña es incorrecta.", "Error de Login", JOptionPane.ERROR_MESSAGE);
+        
+        int loginResult = NetworkUtils.makeLogin(fieldUser.getText(), fieldPassword.getText());
+        if (loginResult != 1) {
+            String message = "La relacion usuario-contraseña es incorrecta. Vuelva a intentarlo.";
+            if(loginResult == -1) {
+                message = "Ha habido un error en el servidor. Puede que estuviera dormido. Vuelva a intentarlo.";
+            }
+            JOptionPane.showMessageDialog(this, message, "Error de Login", JOptionPane.ERROR_MESSAGE);
             enableComponents();
             return;
         }
@@ -365,10 +366,10 @@ public class MainUi extends javax.swing.JFrame {
         });
     }
 
-    public void runMinecraft() {
+    public void runMinecraft(boolean online) {
         if (progressBar.isIndeterminate()) {
             progressBar.setString("Descargando datos...");
-            DataerWorker dataer = new DataerWorker(this, progressBar, settings);
+            DataerWorker dataer = new DataerWorker(this, progressBar, settings, online);
             dataer.execute();
         } else {
             enableComponents();
@@ -388,9 +389,16 @@ public class MainUi extends javax.swing.JFrame {
     }
     
     public void closeAll() {
-        
         System.exit(0);
     }
+    
+    
+    
+//    public boolean makeUpdate(){
+//        int choice = JOptionPane.showOptionDialog(this, "Se ha detectado una actualización.Si continuas perderas todos los datos guardados de Minecraft, del Launcher y se descargara todo de 0.", "AVISO IMPORTANTE", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+//        return choice == JOptionPane.YES_OPTION;
+//    }
+
     public void disableComponents() {
         fieldUser.setEnabled(false);
         fieldPassword.setEnabled(false);
@@ -410,6 +418,7 @@ public class MainUi extends javax.swing.JFrame {
         javaPath.setEnabled(true);
         reset.setEnabled(true);
     }
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

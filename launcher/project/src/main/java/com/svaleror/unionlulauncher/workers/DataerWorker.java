@@ -31,12 +31,15 @@ public class DataerWorker extends SwingWorker {
     private LaunchTask launchTask = null;
     private Settings settings = new Settings();
     
-    public DataerWorker(MainUi parent, JProgressBar progressBar, Settings settings) {
+    public DataerWorker(MainUi parent, JProgressBar progressBar, Settings settings, boolean online) {
        super();
        this.parent = parent;
        this.progressBar = progressBar;
        this.task.setUsername(settings.getUser());
        this.settings = settings;
+       if(!online) {
+           this.task.setNetOffline();
+       }
     }
 
     @Override

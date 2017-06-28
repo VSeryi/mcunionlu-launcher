@@ -7,7 +7,9 @@ package com.svaleror.unionlulauncher.workers;
 
 import com.svaleror.unionlulauncher.gui.MainUi;
 import com.svaleror.unionlulauncher.util.NetworkUtils;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
@@ -22,7 +24,9 @@ public class UpdaterWorker extends SwingWorker {
 
     private MainUi parent;
     private JProgressBar progressBar;
-
+    File gitignore = new File("./.gitignore");
+    String gitignoreContent = "/server.dat\n/options.txt\n/optionsof.txt\n/resourcepacks/*\n/journeymap/*\n/saves/*";
+    
     public UpdaterWorker(MainUi parent, JProgressBar progressBar) {
         super();
         this.parent = parent;
@@ -53,9 +57,12 @@ public class UpdaterWorker extends SwingWorker {
                         .setURI("https://github.com/VSeryi/mcunionlu.git")
                         .setDirectory(minecraftFolder)
                         .call();
+                writeGitIgnore();
+                
             } else {
                 String actualVersion = NetworkUtils.getLastVersion();
                 if (!actualVersion.equals(parent.settings.getVersion())) {
+                    
                     progressBar.setString("Actualizando mods...");
                     git.reset().call();
                     git.checkout().setAllPaths(true).call();
@@ -73,7 +80,20 @@ public class UpdaterWorker extends SwingWorker {
 
     @Override
     protected void done() {
-        parent.runMinecraft();
+        parent.runMinecraft(true);
     }
 
+    public void writeGitIgnore() {
+        try {
+            if (gitignore.exists()) {
+                gitignore.delete();
+            }
+            gitignore.createNewFile();
+            BufferedWriter br = new BufferedWriter(new FileWriter(gitignore));
+            br.write(gitignoreContent);
+            br.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
