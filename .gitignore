@@ -1,2 +1,4 @@
-/launcher/project/target/
-/updater/project/target/
+.project
+.classpath
+.settings
+target
