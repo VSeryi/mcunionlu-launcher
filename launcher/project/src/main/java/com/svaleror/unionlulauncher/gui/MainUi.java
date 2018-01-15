@@ -8,6 +8,8 @@ package com.svaleror.unionlulauncher.gui;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -21,6 +23,8 @@ import javax.swing.JFileChooser;
 import uk.co.rx14.jmclaunchlib.LaunchSpec;
 import uk.co.rx14.jmclaunchlib.LaunchTask;
 import uk.co.rx14.jmclaunchlib.LaunchTaskBuilder;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  *
@@ -65,6 +69,7 @@ public class MainUi extends javax.swing.JFrame {
         checkRemember.setSelected(settings.isRemember());
         spinnerRam.setValue(new Integer(settings.getRam()));
         fileChooser.setSelectedFile(new File(settings.getJavaPath()));
+        statusServerActionPerformed(null);
     }
 
     public MainUi() {
@@ -89,6 +94,12 @@ public class MainUi extends javax.swing.JFrame {
         javaPath = new javax.swing.JButton();
         fieldUser = new javax.swing.JTextField();
         labelPassword = new javax.swing.JLabel();
+        labelPassword.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent evt) {
+        		labelPasswordMouseClicked(evt);
+        	}
+        });
         fieldPassword = new javax.swing.JPasswordField();
         checkRemember = new javax.swing.JCheckBox();
         play = new javax.swing.JButton();
@@ -124,7 +135,7 @@ public class MainUi extends javax.swing.JFrame {
             }
         });
 
-        labelPassword.setText("Contraseña:");
+        labelPassword.setText("Contraseña (?):");
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, checkRemember, org.jdesktop.beansbinding.ObjectProperty.create(), fieldPassword, org.jdesktop.beansbinding.BeanProperty.create("nextFocusableComponent"));
         bindingGroup.addBinding(binding);
@@ -304,6 +315,18 @@ public class MainUi extends javax.swing.JFrame {
         playActionPerformed(evt);
         play.requestFocus();
     }//GEN-LAST:event_fieldPasswordActionPerformed
+    
+    private void labelPasswordMouseClicked(java.awt.event.MouseEvent evt)  {//GEN-FIRST:event_fieldPasswordActionPerformed
+    	try {
+			java.awt.Desktop.getDesktop().browse(new URI("http://unionlu.duckdns.org/"));
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }//GEN-LAST:event_labelPasswordMouseClicked
 
     private void javaPathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_javaPathActionPerformed
         int returnVal = fileChooser.showOpenDialog(this);
@@ -436,5 +459,4 @@ public class MainUi extends javax.swing.JFrame {
     private javax.swing.JSpinner spinnerRam;
     private javax.swing.JRadioButton statusServer;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
-    // End of variables declaration//GEN-END:variables
 }
