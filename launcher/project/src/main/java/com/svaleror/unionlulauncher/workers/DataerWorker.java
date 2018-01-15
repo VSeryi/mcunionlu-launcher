@@ -22,12 +22,7 @@ public class DataerWorker extends SwingWorker {
 
     private MainUi parent;
     private JProgressBar progressBar;
-    private LaunchTaskBuilder task = new LaunchTaskBuilder()
-                    .setCachesDir("./data/")
-                    .setForgeVersion("1.7.10", "1.7.10-10.13.4.1614-1.7.10")
-                    .setInstanceDir("./minecraft/")
-                    .setUsername("Steve")
-                    .setOffline();
+    private LaunchTaskBuilder task = null;
     private LaunchTask launchTask = null;
     private Settings settings = new Settings();
     
@@ -35,7 +30,12 @@ public class DataerWorker extends SwingWorker {
        super();
        this.parent = parent;
        this.progressBar = progressBar;
-       this.task.setUsername(settings.getUser());
+       this.task = new LaunchTaskBuilder()
+               .setCachesDir("./data/")
+               .setForgeVersion("1.7.10", "1.7.10-10.13.4.1614-1.7.10")
+               .setInstanceDir("./minecraft/")
+               .setUsername(settings.getUser())
+               .setOffline();
        this.settings = settings;
        if(!online) {
            this.task.setNetOffline();
