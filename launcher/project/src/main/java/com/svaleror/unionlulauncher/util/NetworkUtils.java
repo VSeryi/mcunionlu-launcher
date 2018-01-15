@@ -52,7 +52,7 @@ public class NetworkUtils {
     public static int makeLogin(String user, String password) {
         int result = 0;
         try {
-            String loginUrl = "http://unionlu-svalero.rhcloud.com/login.php?user=#{username}&password=#{password}";
+            String loginUrl = "http://unionlu.duckdns.org/login.php?user=#{username}&password=#{password}";
             String loginOk = "loginWasOK";
             String loginBad = "loginWasBAD";
             loginUrl = loginUrl.replace("#{username}", user);
