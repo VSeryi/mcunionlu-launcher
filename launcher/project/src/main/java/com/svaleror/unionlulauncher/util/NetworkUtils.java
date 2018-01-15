@@ -41,7 +41,7 @@ public class NetworkUtils {
         try {
             Socket socket = SocketFactory.getDefault().createSocket();
             socket.setSoTimeout(5000);
-            socket.connect(new InetSocketAddress("http://unionlu.duckdns.org", 25565));
+            socket.connect(new InetSocketAddress("unionlu.duckdns.org", 25565));
             socket.close();
         } catch (Exception e) {
             open = false;
