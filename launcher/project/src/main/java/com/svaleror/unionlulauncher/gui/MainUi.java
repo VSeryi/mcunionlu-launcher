@@ -265,7 +265,7 @@ public class MainUi extends javax.swing.JFrame {
             } else {
                 int choice = JOptionPane.showOptionDialog(this, "No se ha establecido conexión con el servidor. Se iniciará el Minecraft en modo Offline.", "AVISO IMPORTANTE", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
                 if (choice == JOptionPane.YES_OPTION) {
-                    this.runMinecraft(true);
+                    this.runMinecraft(false);
                 } else {
                     enableComponents();
                     return;
@@ -275,16 +275,27 @@ public class MainUi extends javax.swing.JFrame {
         
         int loginResult = NetworkUtils.makeLogin(fieldUser.getText(), fieldPassword.getText());
         if (loginResult != 1) {
-            String message = "La relacion usuario-contraseña es incorrecta. Vuelva a intentarlo.";
-            if(loginResult == -1) {
-                message = "Ha habido un error en el servidor. Puede que estuviera dormido. Vuelva a intentarlo.";
+        	
+        	if(loginResult == 0) {
+                JOptionPane.showMessageDialog(this, "La relacion usuario-contraseña es incorrecta. Vuelva a intentarlo.", "Error de Login", JOptionPane.ERROR_MESSAGE);
+                enableComponents();
+                return;
+        	}
+        	
+        	if (settings.getVersion().equals("-1")) {
+                JOptionPane.showMessageDialog(this, "No se ha establecido conexión con el servidor para poder realizar la primera descarga. Por favor inténtelo más tarde.", "Error de Ejecucion", JOptionPane.ERROR_MESSAGE);
+                enableComponents();
+                return;
+            } else {
+                int choice = JOptionPane.showOptionDialog(this, "No se ha establecido conexión con el servidor. Se iniciará el Minecraft en modo Offline.", "AVISO IMPORTANTE", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+                if (choice == JOptionPane.YES_OPTION) {
+                    this.runMinecraft(false);
+                } else {
+                    enableComponents();
+                    return;
+                }
             }
-            JOptionPane.showMessageDialog(this, message, "Error de Login", JOptionPane.ERROR_MESSAGE);
-            enableComponents();
-            return;
         }
-
-        statusServerActionPerformed(null);
 
         if (checkRemember.isSelected()) {
             settings.setRemember(true);
