@@ -38,8 +38,9 @@ public class Main {
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
             writeVersion(actualVersion);
             System.out.println("ACTUALIZACIÖN COMPLETA");
+        } else {
+        	System.out.println("No se ha detectado ninguna actualización. Iniciando directamente...");
         }
-        System.out.println("No se ha detectado ninguna actualización. Iniciando directamente...");
         runLauncher();
         }catch(Exception e) {
             e.printStackTrace();
