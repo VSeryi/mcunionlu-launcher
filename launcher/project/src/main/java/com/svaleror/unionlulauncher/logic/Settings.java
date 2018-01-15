@@ -20,7 +20,7 @@ import uk.co.rx14.jmclaunchlib.util.OS;
  */
 public class Settings {
 
-    private String user = "";
+    private String user = "Steve";
     @JsonIgnore
     private String password = "";
     private String hashPassword = "";
