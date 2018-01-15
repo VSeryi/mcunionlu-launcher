@@ -350,8 +350,10 @@ public class MainUi extends javax.swing.JFrame {
     private void statusServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusServerActionPerformed
         if (NetworkUtils.isServerOn()) {
             statusServer.setSelected(true);
+            statusServer.setToolTipText("Server Online");
         } else {
             statusServer.setSelected(false);
+            statusServer.setToolTipText("Server Offline");
         }
     }//GEN-LAST:event_statusServerActionPerformed
 
