@@ -6,7 +6,10 @@
 package com.svaleror.unionlulauncher.workers;
 
 import com.svaleror.unionlulauncher.gui.MainUi;
+import com.svaleror.unionlulauncher.logic.FS_Win32_NoGit;
 import com.svaleror.unionlulauncher.util.NetworkUtils;
+import com.svaleror.unionlulauncher.util.OSUtils;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -37,6 +40,7 @@ public class UpdaterWorker extends SwingWorker {
     protected Object doInBackground() throws Exception {
         Git git = null;
         File minecraftFolder = new File("./minecraft/");
+        System.out.println();
 
         if (minecraftFolder.exists()) {
             try {
@@ -53,10 +57,17 @@ public class UpdaterWorker extends SwingWorker {
         try {
             if (git == null) {
                 progressBar.setString("Descargando mods...");
-                git = Git.cloneRepository()
-                        .setURI("https://github.com/VSeryi/mcunionlu.git")
-                        .setDirectory(minecraftFolder)
-                        .call();
+                if(OSUtils.isWindows()) {
+                    git = Git.cloneRepository().setFs(new FS_Win32_NoGit())
+                            .setURI("https://github.com/VSeryi/mcunionlu.git")
+                            .setDirectory(minecraftFolder)
+                            .call();
+                } else {
+                    git = Git.cloneRepository()
+                            .setURI("https://github.com/VSeryi/mcunionlu.git")
+                            .setDirectory(minecraftFolder)
+                            .call();
+                }
                 writeGitIgnore();
                 
             } else {
