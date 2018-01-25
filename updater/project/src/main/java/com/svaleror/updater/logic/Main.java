@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -32,10 +33,11 @@ public class Main {
         String actualVersion = NetworkUtils.getLastVersion();
         if (!actualVersion.equals(getVersion())) {
             System.out.println("Encontrado una actualización, actualizando...");
-            URL website = new URL("https://raw.githubusercontent.com/VSeryi/mcunionlu-launcher/master/launcher/bin/launcher.jar");
+            URL website = new URL("https://raw.githubusercontent.com/VSeryi/mcunionlu-launcher/master/launcher/bin/UnionLuLauncher.exe");
             ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-            FileOutputStream fos = new FileOutputStream("launcher.jar");
+            FileOutputStream fos = new FileOutputStream("UnionLu Launcher.exe");
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+            fos.close();
             writeVersion(actualVersion);
             System.out.println("ACTUALIZACIÖN COMPLETA");
         } else {
@@ -49,12 +51,11 @@ public class Main {
     }
 
     public static void runLauncher() {
-        String[] run = {"java", "-jar", "launcher.jar"};
-        try {
-            Runtime.getRuntime().exec(run);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+    	try {
+    		new ProcessBuilder("UnionLu Launcher.exe").start();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
         System.exit(0);
     }
 
