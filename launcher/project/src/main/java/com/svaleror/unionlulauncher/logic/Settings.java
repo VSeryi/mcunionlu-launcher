@@ -5,13 +5,15 @@
  */
 package com.svaleror.unionlulauncher.logic;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.svaleror.unionlulauncher.util.PasswordUtils;
-import java.nio.file.Paths;
+
 import uk.co.rx14.jmclaunchlib.util.OS;
 
 /**
@@ -20,87 +22,89 @@ import uk.co.rx14.jmclaunchlib.util.OS;
  */
 public class Settings {
 
-    private String user = "Steve";
-    @JsonIgnore
-    private String password = "";
-    private String hashPassword = "";
-    private boolean remember = false;
-    private String version = "-1";
-    private int ram = 4;
-    @JsonIgnore
-    private String ramString = "";
-    private String javaPath = Paths.get(System.getProperty("java.home"), "bin", OS.getCURRENT() == OS.WINDOWS ? "javaw.exe" : "java").toAbsolutePath().toString();
+	private String user = "Steve";
+	@JsonIgnore
+	private String password = "";
+	private String hashPassword = "";
+	private boolean remember = false;
+	private String version = "-1";
+	private int ram = 4;
+	@JsonIgnore
+	private String ramString = "";
+	private String javaPath = Paths
+			.get(System.getProperty("java.home"), "bin", OS.getCURRENT() == OS.WINDOWS ? "javaw.exe" : "java")
+			.toAbsolutePath().toString();
 
-    public String getUser() {
-        return user;
-    }
+	public String getHashPassword() {
+		return hashPassword;
+	}
 
-    public void setUser(String user) {
-        this.user = user;
-    }
+	public String getJavaPath() {
+		return javaPath;
+	}
 
-    public String getPassword() {
-        if (password.isEmpty()) {
-            try {
-                password = PasswordUtils.decrypt(hashPassword);
-            } catch (GeneralSecurityException | IOException ex) {
-                Logger.getLogger(Settings.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return password;
-    }
+	public String getPassword() {
+		if (password.isEmpty()) {
+			try {
+				password = PasswordUtils.decrypt(hashPassword);
+			} catch (GeneralSecurityException | IOException ex) {
+				Logger.getLogger(Settings.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
+		return password;
+	}
 
-    public void setPassword(String password) {
-        try {
-            hashPassword = PasswordUtils.encrypt(password);
-        } catch (GeneralSecurityException | IOException ex) {
-            Logger.getLogger(Settings.class.getName()).log(Level.SEVERE, null, ex);
-        }
+	public int getRam() {
+		return ram;
+	}
 
-        this.password = password;
-    }
+	public String getRamString() {
+		return "-Xmx" + ram + "G";
+	}
 
-    public boolean isRemember() {
-        return remember;
-    }
+	public String getUser() {
+		return user;
+	}
 
-    public void setRemember(boolean remember) {
-        this.remember = remember;
-    }
+	public String getVersion() {
+		return version;
+	}
 
-    public String getVersion() {
-        return version;
-    }
+	public boolean isRemember() {
+		return remember;
+	}
 
-    public void setVersion(String version) {
-        this.version = version;
-    }
+	public void setHashPassword(String hashPassword) {
+		this.hashPassword = hashPassword;
+	}
 
-    public void setRam(int ram) {
-        this.ram = ram;
-    }
+	public void setJavaPath(String javaPath) {
+		this.javaPath = javaPath;
+	}
 
-    public int getRam() {
-        return ram;
-    }
+	public void setPassword(String password) {
+		try {
+			hashPassword = PasswordUtils.encrypt(password);
+		} catch (GeneralSecurityException | IOException ex) {
+			Logger.getLogger(Settings.class.getName()).log(Level.SEVERE, null, ex);
+		}
 
-    public String getRamString() {
-        return "-Xmx" + ram + "G";
-    }
+		this.password = password;
+	}
 
-    public String getHashPassword() {
-        return hashPassword;
-    }
+	public void setRam(int ram) {
+		this.ram = ram;
+	}
 
-    public void setHashPassword(String hashPassword) {
-        this.hashPassword = hashPassword;
-    }
+	public void setRemember(boolean remember) {
+		this.remember = remember;
+	}
 
-    public String getJavaPath() {
-        return javaPath;
-    }
+	public void setUser(String user) {
+		this.user = user;
+	}
 
-    public void setJavaPath(String javaPath) {
-        this.javaPath = javaPath;
-    }
+	public void setVersion(String version) {
+		this.version = version;
+	}
 }

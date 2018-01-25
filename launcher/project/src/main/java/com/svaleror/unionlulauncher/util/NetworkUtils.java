@@ -12,7 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URL;
-import java.nio.charset.Charset;
+
 import javax.net.SocketFactory;
 
 /**
@@ -23,28 +23,16 @@ public class NetworkUtils {
 
 	private static String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
 
-	private static String sendGet(String url) throws IOException {
-
-		URL obj = new URL(url);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-		con.setRequestProperty("User-Agent", USER_AGENT);
-
-		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + responseCode);
-
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
-
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine);
+	public static String getLastVersion() {
+		String result = "-1";
+		try {
+			String versionUrl = "https://raw.githubusercontent.com/VSeryi/mcunionlu/master/version.txt";
+			result = sendGet(versionUrl);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = "-1";
 		}
-		in.close();
-
-		return response.toString();
-
+		return result;
 	}
 
 	public static boolean isInternetOn() {
@@ -91,15 +79,27 @@ public class NetworkUtils {
 		return result;
 	}
 
-	public static String getLastVersion() {
-		String result = "-1";
-		try {
-			String versionUrl = "https://raw.githubusercontent.com/VSeryi/mcunionlu/master/version.txt";
-			result = sendGet(versionUrl);
-		} catch (Exception e) {
-			e.printStackTrace();
-			result = "-1";
+	private static String sendGet(String url) throws IOException {
+
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		con.setRequestProperty("User-Agent", USER_AGENT);
+
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'GET' request to URL : " + url);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
 		}
-		return result;
+		in.close();
+
+		return response.toString();
+
 	}
 }
