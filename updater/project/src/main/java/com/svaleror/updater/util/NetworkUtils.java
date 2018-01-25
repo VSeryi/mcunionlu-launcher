@@ -17,44 +17,42 @@ import java.nio.charset.Charset;
  */
 public class NetworkUtils {
 
-    public static boolean isInternetOn() {
-        boolean result = false;
-        try {
-            URL url = new URL("http://www.google.com");
-            HttpURLConnection con = (HttpURLConnection) url
-                    .openConnection();
-            con.connect();
-            if (con.getResponseCode() == 200) {
-                result = true;
-            }
-        } catch (Exception e) {
-            result = false;
-        }
-        return result;
-    }
+	public static String getLastVersion() {
+		String result = "-1";
+		try {
+			String versionUrl = "https://raw.githubusercontent.com/VSeryi/mcunionlu-launcher/master/launcher/bin/version-launcher.txt";
+			URL url = new URL(versionUrl);
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.connect();
+			if (con.getResponseCode() == 200) {
+				BufferedReader r = new BufferedReader(
+						new InputStreamReader(con.getInputStream(), Charset.forName("UTF-8")));
+				StringBuilder sb = new StringBuilder();
+				String line;
+				while ((line = r.readLine()) != null) {
+					sb.append(line);
+				}
+				result = sb.toString();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = "-1";
+		}
+		return result;
+	}
 
-
-    public static String getLastVersion() {
-        String result = "-1";
-        try {
-            String versionUrl = "https://raw.githubusercontent.com/VSeryi/mcunionlu-launcher/master/launcher/bin/version-launcher.txt";
-            URL url = new URL(versionUrl);
-            HttpURLConnection con = (HttpURLConnection) url
-                    .openConnection();
-            con.connect();
-            if (con.getResponseCode() == 200) {
-                BufferedReader r = new BufferedReader(new InputStreamReader(con.getInputStream(), Charset.forName("UTF-8")));
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = r.readLine()) != null) {
-                    sb.append(line);
-                }
-                result = sb.toString();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            result = "-1";
-        }
-        return result;
-    }
+	public static boolean isInternetOn() {
+		boolean result = false;
+		try {
+			URL url = new URL("http://www.google.com");
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.connect();
+			if (con.getResponseCode() == 200) {
+				result = true;
+			}
+		} catch (Exception e) {
+			result = false;
+		}
+		return result;
+	}
 }
