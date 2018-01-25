@@ -18,7 +18,6 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.NoFilepatternException;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
-import org.jboss.forge.addon.git.GitUtils;
 
 import com.machinepublishers.jbrowserdriver.JBrowserDriver;
 import com.machinepublishers.jbrowserdriver.Settings;
@@ -55,6 +54,59 @@ public class Main {
 	private static List<String> MODS_SERVER = Arrays.asList("fastcraft-1.23.jar", "BetterFps-1.0.1.jar");
 	private static List<String> MODS_CLIENT = Arrays.asList("BetterFps-1.0.1.jar", "CustomSkinLoader_1.7.10-14.6a.jar",
 			"OptiFine_1.7.10_HD_U_D6.jar");
+
+	public static void deleteReauthOnClient() {
+		try {
+			File cfg = new File(LOCAL_CLIENT_FOLDER + System.getProperty("file.separator") + "config"
+					+ System.getProperty("file.separator") + "ReAuth.cfg");
+			if (cfg.exists()) {
+				FileUtils.forceDelete(cfg);
+			}
+
+			File mods = new File(LOCAL_CLIENT_FOLDER + System.getProperty("file.separator") + "mods");
+
+			PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:ReAuth*.jar");
+
+			for (File value : mods.listFiles()) {
+				if (matcher.matches(value.toPath())) {
+					FileUtils.forceDelete(value);
+					break;
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static String getLastVersionLink(String url) {
+		JBrowserDriver driver = new JBrowserDriver(Settings.builder().timezone(Timezone.AMERICA_NEWYORK).build());
+		driver.get(url);
+		driver.findElementByXPath("//*[@id=\"table\"]/thead/tr/th[3]").click();
+		String link = driver.findElementByXPath("//*[@id=\"list\"]/tr[1]/td[1]/a").getAttribute("href");
+		driver.quit();
+		return link;
+	}
+
+	public static String getVersion() {
+		String result = "-1";
+		try {
+			File settings = new File("./settings");
+			if (!settings.exists()) {
+				settings.mkdir();
+			}
+			File txt = new File("./settings/version-modpack.txt");
+			if (!txt.exists()) {
+				txt.createNewFile();
+			}
+			BufferedReader br = new BufferedReader(new FileReader(txt));
+			result = br.readLine();
+			br.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 	public static void main(String[] args)
 			throws MalformedURLException, IOException, NoFilepatternException, GitAPIException {
@@ -125,7 +177,7 @@ public class Main {
 
 		deleteReauthOnClient();
 		writeVersionOnClient(lastServerVersion);
-		
+
 		git.add().setUpdate(true).addFilepattern(".").call();
 		git.add().addFilepattern(".").call();
 		git.commit().setMessage(lastServerVersion + " updated.").call();
@@ -138,26 +190,6 @@ public class Main {
 		FileUtils.forceDelete(new File(CLIENT_FOLDER));
 		FileUtils.forceDelete(new File(SERVER_FOLDER));
 		FileUtils.forceDelete(new File(LOCAL_CLIENT_FOLDER));
-	}
-
-	public static String getVersion() {
-		String result = "-1";
-		try {
-			File settings = new File("./settings");
-			if (!settings.exists()) {
-				settings.mkdir();
-			}
-			File txt = new File("./settings/version-modpack.txt");
-			if (!txt.exists()) {
-				txt.createNewFile();
-			}
-			BufferedReader br = new BufferedReader(new FileReader(txt));
-			result = br.readLine();
-			br.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
 	}
 
 	public static void writeVersion(String version) {
@@ -192,38 +224,5 @@ public class Main {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static void deleteReauthOnClient() {
-		try {
-			File cfg = new File(LOCAL_CLIENT_FOLDER + System.getProperty("file.separator") + "config"
-					+ System.getProperty("file.separator") + "ReAuth.cfg");
-			if (cfg.exists()) {
-				FileUtils.forceDelete(cfg);
-			}
-
-			File mods = new File(LOCAL_CLIENT_FOLDER + System.getProperty("file.separator") + "mods");
-
-			PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:ReAuth*.jar");
-
-			for (File value : mods.listFiles()) {
-				if (matcher.matches(value.toPath())) {
-					FileUtils.forceDelete(value);
-					break;
-				}
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static String getLastVersionLink(String url) {
-		JBrowserDriver driver = new JBrowserDriver(Settings.builder().timezone(Timezone.AMERICA_NEWYORK).build());
-		driver.get(url);
-		driver.findElementByXPath("//*[@id=\"table\"]/thead/tr/th[3]").click();
-		String link = driver.findElementByXPath("//*[@id=\"list\"]/tr[1]/td[1]/a").getAttribute("href");
-		driver.quit();
-		return link;
 	}
 }
