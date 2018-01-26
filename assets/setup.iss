@@ -4,7 +4,7 @@
 #define MyAppName "UnionLu Launcher"
 #define MyAppVersion "2.0"
 #define MyAppPublisher "La Union"
-#define MyAppURL "http://unionlu.duckdns.org/"
+#define MyAppURL "https://unionlu.duckdns.org/"
 #define MyAppExeName "Minecraft Unionlu.exe"
 
 [Setup]

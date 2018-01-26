@@ -53,7 +53,7 @@
 							<chdir>.</chdir>
 							<priority>normal</priority>
 							<downloadUrl>http://java.com/download</downloadUrl>
-							<supportUrl>http://unionlu.duckdns.org/</supportUrl>
+							<supportUrl>https://unionlu.duckdns.org/</supportUrl>
 							<stayAlive>false</stayAlive>
 							<restartOnCrash>false</restartOnCrash>
 							<manifest>..\..\assets\app.manifest</manifest>

@@ -356,7 +356,7 @@ public class MainUi extends javax.swing.JFrame {
 
 	private void labelPasswordMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_fieldPasswordActionPerformed
 		try {
-			java.awt.Desktop.getDesktop().browse(new URI("http://unionlu.duckdns.org/"));
+			java.awt.Desktop.getDesktop().browse(new URI("https://unionlu.duckdns.org/"));
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

@@ -38,7 +38,7 @@ public class NetworkUtils {
 	public static boolean isInternetOn() {
 		boolean result = false;
 		try {
-			sendGet("http://www.google.com");
+			sendGet("https://www.google.com");
 			result = true;
 		} catch (Exception e) {
 			result = false;
@@ -62,7 +62,7 @@ public class NetworkUtils {
 	public static int makeLogin(String user, String password) {
 		int result = 0;
 		try {
-			String loginUrl = "http://unionlu.duckdns.org/login_launcher.php?user=#{username}&password=#{password}";
+			String loginUrl = "https://unionlu.duckdns.org/login.php?user=#{username}&password=#{password}";
 			String loginOk = "loginWasOK";
 			String loginBad = "loginWasBAD";
 			loginUrl = loginUrl.replace("#{username}", user);
