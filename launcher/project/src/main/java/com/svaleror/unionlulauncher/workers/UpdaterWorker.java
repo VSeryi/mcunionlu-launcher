@@ -58,6 +58,7 @@ public class UpdaterWorker extends SwingWorker<Object, Object> {
 
 		try {
 			if (git == null) {
+				String actualVersion = NetworkUtils.getLastVersion();
 				progressBar.setString("Descargando mods...");
 				if (OSUtils.isWindows()) {
 					git = Git.cloneRepository().setFs(new FS_Win32_NoGit())
@@ -67,6 +68,7 @@ public class UpdaterWorker extends SwingWorker<Object, Object> {
 							.setDirectory(minecraftFolder).call();
 				}
 				writeGitIgnore();
+				parent.settings.setVersion(actualVersion);
 
 			} else {
 				String actualVersion = NetworkUtils.getLastVersion();
