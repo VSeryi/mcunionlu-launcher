@@ -7,8 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.FileSystems;
-import java.nio.file.PathMatcher;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,7 +41,7 @@ public class Main {
 	private static String MODS_FOLDER = "." + System.getProperty("file.separator") + "mods"
 			+ System.getProperty("file.separator");
 
-	private static String LOCAL_SERVER_FOLDER = "/var/games/minecraft/servers/UnionLU/";
+	private static String LOCAL_SERVER_FOLDER = "/var/games/minecraft/servers/UnionLU/"; //"." + System.getProperty("file.separator") + "server-temp"+  System.getProperty("file.separator"); 
 	private static String LOCAL_CLIENT_FOLDER = "." + System.getProperty("file.separator") + "client-local"
 			+ System.getProperty("file.separator");
 
@@ -65,10 +63,8 @@ public class Main {
 
 			File mods = new File(LOCAL_CLIENT_FOLDER + System.getProperty("file.separator") + "mods");
 
-			PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:ReAuth*.jar");
-
 			for (File value : mods.listFiles()) {
-				if (matcher.matches(value.toPath())) {
+				if (value.getName().toLowerCase().contains("reauth")) {
 					FileUtils.forceDelete(value);
 					break;
 				}
